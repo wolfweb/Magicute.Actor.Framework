@@ -49,7 +49,7 @@ namespace Magicube.Actor.SchedulerClient.Configurations {
     }
 
     public class ManageClientElement : ConfigurationElement {
-        [ConfigurationProperty("host", DefaultValue = "192.168.0.171", IsRequired = true)]
+        [ConfigurationProperty("host", DefaultValue = "localhost", IsRequired = true)]
         public string Host { get { return (string)this["host"]; } set { this["host"] = value; } }
     }
 }
