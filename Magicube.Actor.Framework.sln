@@ -9,13 +9,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicube.Actor.Domain", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicube.Actor.Implementations", "src\Magicube.Actor.Implementations\Magicube.Actor.Implementations.csproj", "{5DD3B001-2D17-4FF6-88A0-C449B2DCB4E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicube.Actor.SchedulerClient", "src\Magicube.Actor.SchedulerClient\Magicube.Actor.SchedulerClient.csproj", "{6705710C-F01B-428D-8F98-20D063B9FD13}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicube.Actor.Host", "src\Magicube.Actor.Host\Magicube.Actor.Host.csproj", "{B9D34866-714E-4AA5-ACC8-E5ACD3077F63}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{8AA1104E-C223-48EA-B176-4E83874A76B7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoClient", "src\Modules\DemoClient\DemoClient.csproj", "{69DD9122-074D-45B1-88E1-816525C2A0E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicube.Actor.SchedulerClient", "src\Magicube.Actor.SchedulerClient\Magicube.Actor.SchedulerClient.csproj", "{6705710C-F01B-428D-8F98-20D063B9FD13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,6 @@ Global
 		{5DD3B001-2D17-4FF6-88A0-C449B2DCB4E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DD3B001-2D17-4FF6-88A0-C449B2DCB4E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DD3B001-2D17-4FF6-88A0-C449B2DCB4E6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6705710C-F01B-428D-8F98-20D063B9FD13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6705710C-F01B-428D-8F98-20D063B9FD13}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6705710C-F01B-428D-8F98-20D063B9FD13}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6705710C-F01B-428D-8F98-20D063B9FD13}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B9D34866-714E-4AA5-ACC8-E5ACD3077F63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B9D34866-714E-4AA5-ACC8-E5ACD3077F63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9D34866-714E-4AA5-ACC8-E5ACD3077F63}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -47,6 +43,10 @@ Global
 		{69DD9122-074D-45B1-88E1-816525C2A0E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69DD9122-074D-45B1-88E1-816525C2A0E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69DD9122-074D-45B1-88E1-816525C2A0E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6705710C-F01B-428D-8F98-20D063B9FD13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6705710C-F01B-428D-8F98-20D063B9FD13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6705710C-F01B-428D-8F98-20D063B9FD13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6705710C-F01B-428D-8F98-20D063B9FD13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

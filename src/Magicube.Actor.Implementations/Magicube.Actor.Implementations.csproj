@@ -61,7 +61,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\CommandAttribute.cs" />
+    <Compile Include="GrainContext.cs" />
     <Compile Include="Implementations.cs" />
+    <Compile Include="CommandFactory.cs" />
+    <Compile Include="Impls\ConnectCommand.cs" />
+    <Compile Include="Impls\DisConnectCommand.cs" />
+    <Compile Include="Impls\EmptyAnswerCommand.cs" />
+    <Compile Include="Impls\JobConnectCommand.cs" />
+    <Compile Include="Impls\JobManageCommand.cs" />
+    <Compile Include="Impls\JobRunCommand.cs" />
+    <Compile Include="InnerPools.cs" />
+    <Compile Include="Interfaces\IAnswerCommand.cs" />
+    <Compile Include="Interfaces\IAskCommand.cs" />
+    <Compile Include="Interfaces\ICommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -78,6 +91,7 @@
       <Name>Magicube.Actor.GrainInterfaces</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\packages\Microsoft.Orleans.OrleansCodeGenerator.Build.1.4.1\build\Microsoft.Orleans.OrleansCodeGenerator.Build.targets" Condition="Exists('..\..\packages\Microsoft.Orleans.OrleansCodeGenerator.Build.1.4.1\build\Microsoft.Orleans.OrleansCodeGenerator.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

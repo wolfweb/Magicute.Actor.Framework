@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Magicube.Actor.Domain;
 using Magicube.Actor.GrainInterfaces;
@@ -9,9 +8,10 @@ using Orleans.Runtime.Configuration;
 namespace DemoClient {
     class Program {
         private static NativeMethods.HandlerRoutine _rout;
-        private static IConnectGrain _connectGrain;
-        private static IConnectObserver _observer;
+        private static ICommandGrain<int> _commandGrain;
+        private static IClientObserver _observer;
         private static ConnectRequest _request;
+        private static readonly ClientCommandContext ClientCommandContext = new ClientCommandContext();
 
         static void Main(string[] args) {
             _rout = new NativeMethods.HandlerRoutine(ConsoleCtrlCheck);
@@ -26,12 +26,21 @@ namespace DemoClient {
                 Description = job.JobDescription
             };
 
-            _connectGrain = GrainClient.GrainFactory.GetGrain<IConnectGrain>(0);
-            var watcher = new DemoObserver(_request, _connectGrain);
-            _observer = GrainClient.GrainFactory.CreateObjectReference<IConnectObserver>(watcher).Result;
-            var result = _connectGrain.Connect(_request, _observer).Result;
-            Console.WriteLine(result);
+            _commandGrain = GetGrain<int>();
+            var watcher = new DemoObserver(ClientCommandContext);
+            _observer = GrainClient.GrainFactory.CreateObjectReference<IClientObserver>(watcher).Result;
+
+            ClientCommandContext.Name = "connect";
+            ClientCommandContext.ConnectContext = new ConnectContext {Connect = _request};
+            ClientCommandContext.Observer = _observer;
+
+            _commandGrain.Execute(ClientCommandContext).Wait();
+            Console.WriteLine("connected...");
             Console.ReadKey();
+        }
+
+        public static ICommandGrain<T> GetGrain<T>() {
+            return GrainClient.GrainFactory.GetGrain<ICommandGrain<T>>(0);
         }
 
         private static bool ConsoleCtrlCheck(NativeMethods.CtrlTypes type) {
@@ -40,41 +49,35 @@ namespace DemoClient {
                 case NativeMethods.CtrlTypes.CTRL_BREAK_EVENT:
                 case NativeMethods.CtrlTypes.CTRL_CLOSE_EVENT:
                 case NativeMethods.CtrlTypes.CTRL_LOGOFF_EVENT:
-                case NativeMethods.CtrlTypes.CTRL_SHUTDOWN_EVENT:
-                    ConsoleUtility.WriteLine("disconnected....", ConsoleColor.Red);
-                    _connectGrain.DisConnect(_request.ClientId).Wait();
+                case NativeMethods.CtrlTypes.CTRL_SHUTDOWN_EVENT: {
+                        ConsoleUtility.WriteLine("disconnected....", ConsoleColor.Red);
+                        ClientCommandContext.Name = "disconnect";
+                        _commandGrain.Execute(ClientCommandContext).Wait();
+                    }
                     break;
             }
             return false;
         }
     }
 
-    public class DemoObserver : IConnectObserver {
-        private readonly ConnectRequest _request;
-        private readonly IConnectGrain _connectGrain;
+    public class DemoObserver : IClientObserver {
+        private readonly ClientCommandContext _ctx;
 
-        public DemoObserver(ConnectRequest request, IConnectGrain connectGrain) {
-            _request = request;
-            _connectGrain = connectGrain;
+        public DemoObserver(ClientCommandContext ctx) {
+            _ctx = ctx;
         }
 
-        public void ExecuteCmd(CmdContext ctx) {
-            switch (ctx.Message) {
-                case JobNoticeMsg.ExecuteJob:
-                    if (ctx.ArguementContext != null)
-                        foreach (KeyValuePair<string, object> item in ctx.ArguementContext) {
+        public void ExecuteCmd(CommandContext ctx) {
+            switch (ctx.Name) {
+                case "StartJob":
+                    if (ctx.ArguementCtx != null)
+                        foreach (KeyValuePair<string, object> item in ctx.ArguementCtx) {
                             Console.WriteLine($"key-{item.Key},value-{item.Value}");
                         } else
                         Console.WriteLine("start job");
                     break;
-                case JobNoticeMsg.ExecuteRepair:
-                    _connectGrain.RepairReport(_request.ClientId, ctx.ArguementContext.ToString()).Wait();
-                    break;
-                case JobNoticeMsg.RegisterReport:
+                case "RegisterReport":
                     Console.WriteLine("executed!");
-                    break;
-                case JobNoticeMsg.Ping:
-                    _connectGrain.Pong(_request.ClientId).Wait();
                     break;
             }
         }

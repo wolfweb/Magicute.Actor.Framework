@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Magicube.Actor.Domain;
 using Magicube.Actor.GrainInterfaces;
 using Magicube.Actor.SchedulerClient.Modules;
 using Orleans;
@@ -13,40 +13,51 @@ namespace Magicube.Actor.SchedulerClient.Services {
         Task StopHost();
     }
     public class JobHostService : IJobHostService {
-        private readonly IConnectGrain _connectGrain;
-        private readonly IManageGrain _manageGrain;
+        private static readonly JobCommandContext JobCtx = new JobCommandContext();
 
         public JobHostService() {
             var config = ClientConfiguration.LoadFromFile("ClientConfiguration.xml");
             GrainClient.Initialize(config);
-            _connectGrain = GrainClient.GrainFactory.GetGrain<IConnectGrain>(0);
-            _manageGrain = GrainClient.GrainFactory.GetGrain<IManageGrain>(0);
         }
 
         public async Task StartHost(IScheduler scheduler) {
-            var watcher = new JobHostObserver(scheduler, _connectGrain);
-            var observer = await GrainClient.GrainFactory.CreateObjectReference<IManagerObserver>(watcher);
-            await _connectGrain.Manage(observer);
-            var clients = await _manageGrain.GetClients();
+            var connectGrain = GetGrain<int>();
+            var watcher = new JobHostObserver(scheduler, JobCtx, connectGrain);
+            var observer = await GrainClient.GrainFactory.CreateObjectReference<IJobObserver>(watcher);
+            await connectGrain.Execute(new JobCommandContext { Name = "job-manage-connect", Observer = observer });
+
+            JobCtx.Observer = observer;
+
+            var manageGrain = GetGrain<List<ClientCommandContext>>();
+            var clients = await manageGrain.Execute(new JobCommandContext { Name = "job-manage-getlist", Observer = observer });
             foreach (var client in clients) {
-                if (client.Client.Description == null) continue;
-                var job = new CastingJobDescription(client.Client.Description);
-                if (!scheduler.CheckExists(new JobKey(client.Client.Description.JobName, client.Client.Description.JobGroup))) {
+                var connect = client.ConnectContext.Connect;
+                if (connect.Description == null) continue;
+                var job = new CastingJobDescription(connect.Description);
+                if (!scheduler.CheckExists(new JobKey(connect.Description.JobName, connect.Description.JobGroup))) {
                     scheduler.ScheduleJob(job.RetrieveJobDetail(jobData => {
-                        _connectGrain.ExecuteCmd(client.ClientId, new CmdContext {
-                            Message = JobNoticeMsg.ExecuteJob,
-                            ArguementContext = jobData
-                        }).Wait();
+                        var cmd = new ClientCommandContext {
+                            Name = "job-manage-start",
+                            ArguementCtx = jobData,
+                            ConnectContext = client.ConnectContext,
+                            Observer = client.Observer
+                        };
+                        manageGrain.Execute(cmd).Wait();
                     }), job.RetrieveJobTrigger());
-                    ConsoleUtility.WriteLine($"Job {client.Client.Description.JobGroup}-{client.Client.Description.JobName} Registed!", ConsoleColor.Green);
+                    ConsoleUtility.WriteLine($"Job {connect.Description.JobGroup}-{connect.Description.JobName} Registed!", ConsoleColor.Green);
                 } else {
-                    ConsoleUtility.WriteLine($"Job {client.Client.Description.JobGroup}-{client.Client.Description.JobName} ReConnectioned!", ConsoleColor.Green);
+                    ConsoleUtility.WriteLine($"Job {connect.Description.JobGroup}-{connect.Description.JobName} ReConnectioned!", ConsoleColor.Green);
                 }
             }
         }
 
         public async Task StopHost() {
             await TaskDone.Done;
+        }
+
+
+        public ICommandGrain<T> GetGrain<T>() {
+            return GrainClient.GrainFactory.GetGrain<ICommandGrain<T>>(0);
         }
     }
 }
