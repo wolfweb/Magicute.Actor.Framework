@@ -72,6 +72,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientContext.cs" />
+    <Compile Include="CommandContext.cs" />
     <Compile Include="ConnectContext.cs" />
     <Compile Include="Interfaces.cs" />
     <Compile Include="NativeMethods.cs" />

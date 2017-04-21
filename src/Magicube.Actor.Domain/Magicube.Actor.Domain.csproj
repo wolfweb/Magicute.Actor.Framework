@@ -68,7 +68,6 @@
   <ItemGroup>
     <Compile Include="ClientIp.cs" />
     <Compile Include="ClientStatus.cs" />
-    <Compile Include="CmdContext.cs" />
     <Compile Include="ManageTerminal.cs" />
     <Compile Include="ReportConfig.cs" />
     <Compile Include="ConnectRequest.cs" />
