@@ -12,7 +12,7 @@ namespace Magicube.Actor.Implementations {
         private readonly Dictionary<string, Tuple<HubConnection, IHubProxy>> _hubs = new Dictionary<string, Tuple<HubConnection, IHubProxy>>();
         private static ObserverSubscriptionManager<IClientObserver> _subscribers;
         private static ObserverSubscriptionManager<IJobObserver> _subscriptionJob;
-        private readonly CommandFactory _commandFactory = new CommandFactory();
+        private static readonly CommandFactory CommandFactory = new CommandFactory();
 
         public override async Task OnActivateAsync() {
             _subscribers = new ObserverSubscriptionManager<IClientObserver>();
@@ -28,7 +28,7 @@ namespace Magicube.Actor.Implementations {
 
         public async Task<T> Execute(CommandContext cmd) {
             GrainContext ctx = BuildContext(cmd);
-            return await _commandFactory.Execute<T>(ctx);
+            return await CommandFactory.Execute<T>(ctx);
         }
 
         private GrainContext BuildContext(CommandContext cmd) {
