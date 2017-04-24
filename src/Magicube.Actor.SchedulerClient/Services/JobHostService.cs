@@ -22,7 +22,7 @@ namespace Magicube.Actor.SchedulerClient.Services {
 
         public async Task StartHost(IScheduler scheduler) {
             var connectGrain = GetGrain<int>();
-            var watcher = new JobHostObserver(scheduler, JobCtx, connectGrain);
+            var watcher = new JobHostObserver(scheduler, connectGrain);
             var observer = await GrainClient.GrainFactory.CreateObjectReference<IJobObserver>(watcher);
             await connectGrain.Execute(new JobCommandContext { Name = "job-manage-connect", Observer = observer });
 

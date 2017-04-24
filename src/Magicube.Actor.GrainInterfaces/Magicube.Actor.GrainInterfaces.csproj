@@ -72,9 +72,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientContext.cs" />
-    <Compile Include="CommandContext.cs" />
     <Compile Include="ConnectContext.cs" />
+    <Compile Include="CommandContext.cs" />
+    <Compile Include="ClientDescriptor.cs" />
     <Compile Include="Interfaces.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
