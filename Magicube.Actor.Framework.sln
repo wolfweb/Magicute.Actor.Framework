@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoClient", "src\Modules\D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicube.Actor.SchedulerClient", "src\Magicube.Actor.SchedulerClient\Magicube.Actor.SchedulerClient.csproj", "{6705710C-F01B-428D-8F98-20D063B9FD13}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicube.Actor.Web", "src\Magicube.Actor.Web\Magicube.Actor.Web.csproj", "{10F88885-8DAC-4F7A-BD70-A5086C78FA8A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{6705710C-F01B-428D-8F98-20D063B9FD13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6705710C-F01B-428D-8F98-20D063B9FD13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6705710C-F01B-428D-8F98-20D063B9FD13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10F88885-8DAC-4F7A-BD70-A5086C78FA8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10F88885-8DAC-4F7A-BD70-A5086C78FA8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10F88885-8DAC-4F7A-BD70-A5086C78FA8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10F88885-8DAC-4F7A-BD70-A5086C78FA8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
